@@ -1,0 +1,111 @@
+#include <iostream>
+#include <iomanip>
+#include <string>
+using namespace std;
+
+class Caldendar{
+protected:
+        int m_year;                               //年份
+        int m_month;                              //月份
+        static long long t_day;                   //计算距离公元元年的天数
+        int m_day[12];                            //一年中每个月的天数
+public:
+        void setyear(int year);                   //输入年份
+        bool isleapyear();                        //判断是否是闰年
+        void getdays();                           //获得每月天数
+        void print();                             //打印日历
+};
+long long Caldendar::t_day = 0;
+
+void Caldendar::getdays()
+{
+    if(isleapyear() == true)
+    {
+        int day[12] = {31,29,31,30,31,30,31,31,30,31,30,31};
+        for(int i = 0;i < 12;i++)
+        {
+            m_day[i] = day[i];
+        }
+    }
+    else
+    {
+        int day[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
+        for(int i = 0;i < 12;i++)
+        {
+            m_day[i] = day[i];
+        }
+    }
+
+}
+void Caldendar::setyear(int year)
+{
+    m_year = year;
+}
+bool Caldendar::isleapyear()
+{
+    if((m_year%4 == 0&&m_year%100 != 0)||(m_year%400 == 0))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+void Caldendar::print()
+{
+    char *t_month[12] = {"一月（Jan）","二月（Feb）","三月（Mar）","四月（Apr）","五月（May）","六月（Jun）","七月（Jul）","八月（Aug）","九月（Sep）","十月（Oct）","十一月（Nov）","十二月（Dec）"};
+    char *t_week[7] = {"Sun","Mon","Tue","Wen","Thru","Fri","Sat"};
+    long long count = 0;                     //用于换行
+    for(int i = 1;i < m_year;i++)
+    {
+        if((i%4 == 0&&i%100 != 0)||(i%400 == 0))
+        {
+            t_day += 366;
+        }
+        else{
+            t_day += 365;
+        }
+    }
+    count = t_day%7+1;
+    system("reset");
+    cout<<"年份："<<m_year<<endl;
+    for(m_month = 0;m_month < 12;m_month++)
+    {
+        cout<<"---------------------------------"<<endl<<endl;
+        cout<<t_month[m_month]<<endl;
+        for(int m = 0;m < 7;m++)
+        {
+            cout<<t_week[m]<<"  ";
+        }
+        cout<<endl;
+        int j = 0;
+        for(int k = 0;k < count%7;k++)
+        {
+            cout<<setw(3)<<"     ";
+        }
+        for( j = 0;j < m_day[m_month];j++)
+        {
+            count++;
+            cout<<setw(3)<<j+1<<"  ";
+            if(count%7 == 0)
+            {
+                cout<<endl;
+            }
+        }
+        cout<<endl;
+    }
+}
+int main()
+{
+    int year = 0;
+    cout<<"请输入年份:";
+    cin>>year;
+    Caldendar p;
+    p.setyear(year);
+    p.getdays();
+    p.print();
+    return 0;
+}
+
+
